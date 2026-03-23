@@ -1,0 +1,20 @@
+{
+    "professions": [
+        "Developer",
+        "Designer",
+        "Manager",
+        "Tester"
+    ],
+    "cities": [
+        "Chisinau",
+        "Bucurest",
+        "Berlin",
+        "Paris"
+    ],
+    "hobbies": [
+        "Reading",
+        "Traveling",
+        "Cooking",
+        "Gaming"
+    ]
+}
