@@ -1,57 +1,48 @@
-import React, { useState } from "react";
-import { Steps } from "antd";
-import FormContext from "./MultiStepFormContext";
+import React from "react";
+import { Steps, Button } from "antd";
+import { useFormContext } from "./MultiStepFormContext";
 import Details from "./Details";
 import Address from "./Address";
-import Review from "./Review";
 import HobbyForm from "./HobbyForm";
+import Review from "./Review";
+import Preview from "./Preview";
 
 const { Step } = Steps;
 
-const detailsInitialState = { name: "", age: "", profession: "" };
-const addressInitialState = { address1: "", address2: "", city: "" };
-
-const renderStep = (step) => {
-  switch (step) {
-    case 0: return <Details />;
-    case 1: return <Address />;
-    case 2: return <HobbyForm />;
-    case 3: return <Review />;
-    default: return null;
-  }
-};
-
 const MultiStepForm = () => {
-    const savedData = JSON.parse(localStorage.getItem("formData")) || {};
-    const [details, setDetails] = useState(savedData.details || detailsInitialState);
-    const [address, setAddress] = useState(savedData.address || addressInitialState);
-    const [currentStep, setCurrentStep] = useState(0);
+  const { state, dispatch } = useFormContext();
 
-    const next = () => {
-        if (currentStep === 3) {
-            localStorage.setItem("formData", JSON.stringify({ details, address }));
-            setCurrentStep(0);
-            setDetails(detailsInitialState);
-            setAddress(addressInitialState);
-            return;
-        }
-        setCurrentStep(currentStep + 1);
-    };
+  const steps = [
+    { title: "Details", content: <Details /> },
+    { title: "Address", content: <Address /> },
+    { title: "Hobbies", content: <HobbyForm /> },
+    { title: "Review", content: <Review /> },
+  ];
 
-    const prev = () => setCurrentStep(currentStep - 1);
+  return (
+    <div className="form__container">
+      <Steps current={state.step}>
+        {steps.map((s, i) => (
+          <Step key={i} title={s.title} />
+        ))}
+      </Steps>
 
-        return (
-            <FormContext.Provider value={{ details, setDetails,  next, prev, address, setAddress, }}>
-                <Steps current={currentStep} style={{ marginBottom: "2em"}}>
-                   < Step title="Fill in you details" />
-                   < Step title="Address details" />
-                   < Step title="Hobbies" />
-                   < Step title="Review and Save" />
-                </Steps>
-                <main>{renderStep(currentStep)}</main>
-            </FormContext.Provider>
-        );
-    };
+      <div className="form__content">{steps[state.step].content}</div>
 
+      <div className="form__buttons">
+        {state.step > 0 && (
+          <Button onClick={() => dispatch({ type: "PREV_STEP" })}>Back</Button>
+        )}
+        {state.step < steps.length - 1 && (
+          <Button type="primary" onClick={() => dispatch({ type: "NEXT_STEP" })}>
+            Next
+          </Button>
+        )}
+      </div>
+
+      <Preview />
+    </div>
+  );
+};
 
 export default MultiStepForm;

@@ -1,76 +1,39 @@
-import React, { useContext } from "react";
-import { Formik, Field, Form } from "formik";
-import { Button, Input, InputNumber, Select } from "antd";
-import FormContext from "./MultiStepFormContext";
+import React from "react";
+import { Input, InputNumber, Select } from "antd";
+import { useFormContext } from "./MultiStepFormContext";
 import options from "../data/options.json";
 
 const Details = () => {
-  const { details, setDetails, next } = useContext(FormContext);
+  const { state, dispatch } = useFormContext();
 
   return (
-    <Formik
-      initialValues={details}
-      onSubmit={(values) => { setDetails(values); next(); }}
-      validate={(values) => {
-        const errors = {};
-        if (!values.name) errors.name = "Name is required";
-        if (!values.age) errors.age = "Age is required";
-        if (values.age > 90) errors.age = "Are you sure you're human?";
-        if (!values.profession) errors.profession = "Profession is required";
-        return errors;
-      }}
-    >
-      {({ errors }) => (
-        <Form className="details__wrapper">
-          <div className={`form__item ${errors.name && "input__error"}`}>
-            <label>Name </label>
-            <Field name="name">
-              {({ field }) => <Input {...field} />}
-            </Field>
-            <p className="error__feedback">{errors.name}</p>
-          </div>
+    <div className="form__step">
+      <label>Name</label>
+      <Input
+        value={state.name}
+        onChange={(e) => dispatch({ type: "SET_NAME", payload: e.target.value })}
+      />
 
-          <div className={`form__item ${errors.age && "input__error"}`}>
-            <label>Age </label>
-            <Field name="age">
-              {({ field, form }) => (
-                <InputNumber
-                  min={0}
-                  style={{ width: "100%" }}
-                  value={field.value}
-                  onChange={(val) => form.setFieldValue(field.name, val)}
-                />
-              )}
-            </Field>
-            <p className="error__feedback">{errors.age}</p>
-          </div>
+      <label>Age</label>
+      <InputNumber
+        value={state.age}
+        onChange={(val) => dispatch({ type: "SET_AGE", payload: val })}
+        style={{ width: "100%" }}
+      />
 
-          <div className={`form__item ${errors.profession && "input__error"}`}>
-            <label>Profession </label>
-            <Field name="profession">
-              {({ field, form }) => (
-                <Select
-                  style={{ width: "100%" }}
-                  value={field.value}
-                  onChange={(val) => form.setFieldValue(field.name, val)}
-                >
-                  {options.professions.map((p) => (
-                    <Select.Option key={p} value={p}>
-                      {p}
-                    </Select.Option>
-                  ))}
-                </Select>
-              )}
-            </Field>
-            <p className="error__feedback">{errors.profession}</p>
-          </div>
-
-          <div className="form__item button__items d-flex justify-content-end">
-            <Button type="primary" htmlType="submit">Next</Button>
-          </div>
-        </Form>
-      )}
-    </Formik>
+      <label>Profession</label>
+      <Select
+        value={state.profession}
+        onChange={(val) => dispatch({ type: "SET_PROFESSION", payload: val })}
+        style={{ width: "100%" }}
+      >
+        {options.professions.map((p) => (
+          <Select.Option key={p} value={p}>
+            {p}
+          </Select.Option>
+        ))}
+      </Select>
+    </div>
   );
 };
 

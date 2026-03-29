@@ -1,11 +1,19 @@
-import MultiStepForm from "./MultiStepForm";
+import React from "react";
+import { FormProvider } from "./MultiStepForm/MultiStepFormContext";
+import MultiStepForm from "./MultiStepForm/MultiStepForm";
 import "./styles.css";
+import ProfileList from "./MultiStepForm/ProfileList";
 
-export default function App() {
+const App = () => {
   return (
-    <div className="App">
-      <h1>Multi Step Form</h1>
-      <MultiStepForm />
-    </div>
+    <FormProvider>
+      <div className="app__container">
+        <h1>Dating Platform Form</h1>
+        <MultiStepForm />
+        <ProfileList />
+      </div>
+    </FormProvider>
   );
-}
+};
+
+export default App;

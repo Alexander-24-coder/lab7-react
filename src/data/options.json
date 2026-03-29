@@ -3,18 +3,39 @@
         "Developer",
         "Designer",
         "Manager",
-        "Tester"
+        "Tester",
+        "Analyst",
+        "Consultant",
+        "Engineer",
+        "Architect",
+        "Administrator",
+        "Support"
     ],
     "cities": [
         "Chisinau",
         "Bucurest",
         "Berlin",
-        "Paris"
+        "Paris",
+        "London",
+
+        "Madrid",
+        "Rome",
+        "Vienna",
+        "Prague",
+        "Warsaw"
+
+        
     ],
     "hobbies": [
         "Reading",
         "Traveling",
         "Cooking",
-        "Gaming"
+        "Sports",
+        "Music",
+        "Gaming",
+        "Photography",
+        "Dancing",
+        "Movies",
+        "Fitness"
     ]
 }

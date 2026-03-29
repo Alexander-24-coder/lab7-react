@@ -1,40 +1,32 @@
-import React, { useContext } from "react";
-import { Formik, Form } from "formik";
-import { Checkbox, Button } from "antd";
-import FormContext from "./MultiStepFormContext";
+import React from "react";
+import { Checkbox, Radio } from "antd";
+import { useFormContext } from "./MultiStepFormContext";
 import options from "../data/options.json";
 
 const HobbyForm = () => {
-  const { details, setDetails, next, prev } = useContext(FormContext);
+  const { state, dispatch } = useFormContext();
 
   return (
-    <Formik
-      initialValues={{ hobbies: details.hobbies || [] }}
-      onSubmit={(values) => {
-        setDetails({ ...details, hobbies: values.hobbies });
-        next();
-      }}
-    >
-      {({ values, setFieldValue }) => (
-        <Form className="details__wrapper">
-          <div className="form__item">
-            <label>Choose your hobbies:</label>
-            <Checkbox.Group
-              options={options.hobbies}
-              value={values.hobbies}
-              onChange={(checkedValues) =>
-                setFieldValue("hobbies", checkedValues)
-              }
-            />
-          </div>
+    <div className="form__step">
+      <label>Hobbies</label>
+      <Checkbox.Group
+        options={options.hobbies}
+        value={state.hobbies}
+        onChange={(vals) => dispatch({ type: "SET_HOBBIES", payload: vals })}
+      />
 
-          <div className="form__item button__items d-flex justify-content-between">
-            <Button type="default" onClick={prev}>Back</Button>
-            <Button type="primary" htmlType="submit">Next</Button>
-          </div>
-        </Form>
-      )}
-    </Formik>
+      <label>Preferences</label>
+      <Radio.Group
+        value={state.preferences}
+        onChange={(e) =>
+          dispatch({ type: "SET_PREFERENCES", payload: e.target.value })
+        }
+      >
+        <Radio value="friendship">Friendship</Radio>
+        <Radio value="dating">Dating</Radio>
+        <Radio value="longterm">Long-term relationship</Radio>
+      </Radio.Group>
+    </div>
   );
 };
 
